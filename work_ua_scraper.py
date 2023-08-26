@@ -32,9 +32,7 @@ def data_work_ua_jobs_extractor(url, state, filename):
         return
 
     content = get_node_flat_string(card)
-    job_description = get_job_description(content)
-
-    if job_description:
+    if job_description := get_job_description(content):
         append_to_file(filename, job_description)
 
 

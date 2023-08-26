@@ -17,10 +17,7 @@ class ScraperDataState(object):
         self.fetched_urls = {}
 
     def __getitem__(self, key):
-        if key in self.data:
-            return self.data[key]
-
-        return None
+        return self.data[key] if key in self.data else None
 
     def __iter__(self):
         return self.data.__iter__()

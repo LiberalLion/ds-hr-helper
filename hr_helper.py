@@ -126,11 +126,10 @@ def build_weights(data, common_words, stop_words, is_stem=True):
     for text in data:
         words = get_sentence_sanitized_words(text, stop_words, is_stem)
 
-        entry_weight = 0
-        for word_weight, word in enumerate(common_words, 1):
-            entry_weight += calculate_common_weight(words, word, word_weight,
-                                                    common_words)
-
+        entry_weight = sum(
+            calculate_common_weight(words, word, word_weight, common_words)
+            for word_weight, word in enumerate(common_words, 1)
+        )
         weights.append(entry_weight)
 
     return normalize_weights(weights)
@@ -193,13 +192,13 @@ def classificate_jobs(data, exclude_words, num_of_train_rows,
     clf = BernoulliNB(alpha=1)
     y_test = classification(clf, vectorizer, x_train, y_train, x_test)
 
-    print('Word SnowballStemmer enable: {}.'.format(is_stem))
+    print(f'Word SnowballStemmer enable: {is_stem}.')
     common_words_template = 'Number of common words used for training: {}.'
     print(common_words_template.format(num_of_common_words))
 
-    print('Loaded data size: {}.'.format(len(data)))
-    print('Training data size: {}.'.format(len(x_train)))
-    print('Test data size: {}.'.format(len(x_test)))
+    print(f'Loaded data size: {len(data)}.')
+    print(f'Training data size: {len(x_train)}.')
+    print(f'Test data size: {len(x_test)}.')
 
     train_counter = Counter(y_train)
     train_accepted = train_counter.get(JOB_ACCEPT_STR, 0)
